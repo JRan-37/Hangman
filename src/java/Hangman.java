@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Scanner;
 
@@ -9,7 +8,7 @@ public class Hangman {
     private RandomWord hiddenWord;
     private boolean running;
     private int misses;
-    private Scanner input;
+    private final Scanner input;
     private ArrayList<Character> missedCharacters;
     private ArrayList<Character> matchedCharacters;
 
@@ -18,16 +17,16 @@ public class Hangman {
         hiddenWord = new RandomWord();
         input = new Scanner(System.in);
         misses = 0;
-        missedCharacters = new ArrayList<Character>();
-        matchedCharacters = new ArrayList<Character>();
+        missedCharacters = new ArrayList<>();
+        matchedCharacters = new ArrayList<>();
     }
 
     public void run() {
-        boolean retry = false;
+        boolean retry;
         do {
             startGame();
             System.out.println("Play again? (Yes or No)");
-            retry = getInput().startsWith("y") ? true : false;
+            retry = getInput().startsWith("y");
             if(retry) {
                 reset();
             }
@@ -47,7 +46,7 @@ public class Hangman {
         displayGame(misses);
         displayMisses();
         running = displayWord();
-        if(running) { guess(promptUser()); };
+        if(running) { guess(promptUser()); }
     }
 
 
@@ -119,7 +118,7 @@ public class Hangman {
 
     private char promptUser() {
         char input;
-        boolean repeat = false;
+        boolean repeat;
         do {
             System.out.println("Guess a letter.");
             input = getInput().charAt(0);
@@ -140,7 +139,7 @@ public class Hangman {
             readIn = input.nextLine().toLowerCase();
         }
         catch (Exception e) {
-            System.out.println("Invalid Input - Exception: " + e.toString());
+            System.out.println("Invalid Input - Exception: " + e);
             readIn = getInput();
         }
 
@@ -151,8 +150,8 @@ public class Hangman {
     public void reset() {
         hiddenWord = new RandomWord();
         misses = 0;
-        missedCharacters = new ArrayList<Character>();
-        matchedCharacters = new ArrayList<Character>();
+        missedCharacters = new ArrayList<>();
+        matchedCharacters = new ArrayList<>();
     }
 
     public RandomWord getWordObj() {

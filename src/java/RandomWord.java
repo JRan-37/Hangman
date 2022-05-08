@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.IntStream;
 
 public class RandomWord {
 
@@ -26,11 +27,11 @@ public class RandomWord {
 
     @Override
     public String toString() {
-        String rString = "";
-        for(int i = 0; i < word.length(); i++) {
-            rString += guessed[i] ? " " + word.charAt(i) : " _";
-        }
-        return rString;
+        String[] stringArray = new String[word.length()];
+        IntStream.range(0, word.length())
+                .forEachOrdered(i -> stringArray[i] = guessed[i] ? " " + word.charAt(i) : " _");
+        String rString = Arrays.toString(stringArray).replace(",", "");
+        return rString.substring(1, rString.length() - 1);
     }
 
     public String getWord() {
@@ -38,22 +39,17 @@ public class RandomWord {
     }
 
     public boolean checkGuess(char input) {
-        boolean match = false;
-        for(int i = 0; i < word.length(); i++) {
-            if(input == word.charAt(i)) {
-                guessed[i] = true;
-                match = true;
-            }
-        }
-        return match;
+        boolean[] oldGuessed = guessed.clone();
+        IntStream.range(0, word.length())
+                .forEachOrdered(i -> guessed[i] = word.charAt(i) == input ? true : guessed[i]);
+        return !Arrays.equals(oldGuessed, guessed);
     }
 
     public boolean checkFinished() {
-        for(boolean bool : guessed) {
-            if(!bool)
-                return false;
-        }
-        return true;
+        String[] stringArray = new String[guessed.length];
+        IntStream.range(0, guessed.length)
+                .forEachOrdered(i -> stringArray[i] = guessed[i] ? "t" : "f");
+        return !Arrays.toString(stringArray).contains("f");
     }
 
     private String getRandomWord() {
